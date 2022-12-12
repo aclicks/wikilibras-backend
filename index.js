@@ -1,6 +1,8 @@
+import cors from "cors";
 import express from "express";
 import * as dotenv from "dotenv";
 import connect from "./config/db.config.js";
+import { termoRoute } from "./routes/termo.routes.js";
 
 dotenv.config();
 
@@ -11,10 +13,11 @@ app.use(express.json())
 // lógicas das rotas vão aqui //
 
 connect();
+app.use(cors());
 
 // app.use("/user", userRoute);
 
-// app.use("/termo", termoRoute);
+app.use("/termo", termoRoute );
 
 // o servidor subindo pro ar.
 app.listen(process.env.PORT, () => {
