@@ -15,8 +15,6 @@ app.use(express.json());
 connect();
 app.use(cors());
 
-app.use(cors());
-
 // app.use("/user", userRoute);
 
 app.use("/termo", termoRoute);
