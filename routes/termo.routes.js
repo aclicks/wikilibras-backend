@@ -11,27 +11,16 @@ termoRoute.post("/new-termo", async (req,res) => {
             ...req.body
           });
 
-          createdTermo.criadoPor.forEach(async (element) => {
-            await termoModel.findByIdAndUpdate(
-              element.userID,
-              {
-                $push: { criadoPor : createdTermo._id },
-              },
-              { runValidators: true }
-            );
-          })
-
-          console.log("termo ",createdTermo)
-
-          createdTermo.criadoPor.forEach(async (element) => {
+  //console.log("termo ",createdTermo)
+          
             await UserModel.findByIdAndUpdate(
-              element.userID,
+              ,
               {
                 $push: { created: createdTermo._id },
               },
               { runValidators: true }
             );
-          })
+        
 
           return res.status(201).json(createdTermo);
     } catch (err) {
@@ -55,21 +44,28 @@ termoRoute.get("/all-termos", async (req, res) => {
 
 //READ termo específico - popula somente ou editadoPor ou criadoPor
 termoRoute.get("/termo/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    // const user = await UserModel.find({_id: id})
-    const termo = await termoModel.findById(id);
-    console.log("termo ", termo);
-    if (!termo) {
-      return res.status(400).json({ msg: " Termo não encontrado!" });
-    }
-    return res.status(200).json(termo);
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json(error.errors);
-  }
-});
+    try {
+        const { id } = req.params;
+        
+        const termo = await termoModel.findById(id).populate({
+          path: "editadoPor",
+          populate: {
+            path: "userID",
+            model: "User",
+          },
+        });
+        
+    
+        console.log("termo ",termo);
+        if (!termo) {
+          return res.status(400).json({ msg: " Termo não encontrado!" });
+        }
+        return res.status(200).json(termo);
+      } catch (error) {
+        console.log(error);
+        return res.status(500).json(error.errors);
+      }
+    });
 
 //UPDATE termo
 termoRoute.put("/edit/:idTermo", async (req, res) => {
@@ -103,31 +99,26 @@ termoRoute.put("/edit/:idTermo", async (req, res) => {
       try {
         const { idTermo} = req.params;
          
-        /*
-        const deleteTermodeUser = await termoModel.findById(idTermo)
-        console.log("teste ",deleteTermodeUser)
-
-        deleteTermodeUser.editadoPor.forEach(async (element) => {
-            await UserModel.findByIdAndUpdate(
-              element.userID,
-              {
-                $pull: { edited: deleteTermodeUser._id },
-              },
-              { runValidators: true }
-            );
-          })
-        */
+        const deletedTermo = await termoModel.findByIdAndDelete(idTermo);
+       /*
         await UserModel.findByIdAndUpdate(
-            deletedTermo.userID,
+            deletedTermo.editadoPor.userID,
             {
-              $pull: {
-                tasks: idTask,
-              },
+              $pull: { edited: idTermo }
             },
-            { new: true, runValidators: true }
+            { runValidators: true }
+          );
+        */  
+          await UserModel.findByIdAndUpdate(
+            deletedTermo.criadoPor.userID,
+            {
+              $pull: { created: idTermo }
+            },
+            { runValidators: true }
           );
 
-        const deletedTermo = await termoModel.findByIdAndDelete(idTermo);
+          console.log("teste ",deletedTermo.criadoPor)
+
         return res.status(200).json(deletedTermo);
       } catch (error) {
         console.log(error);

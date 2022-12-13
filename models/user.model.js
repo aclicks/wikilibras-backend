@@ -47,8 +47,8 @@ const userSchema = new Schema(
       ],
     },
     cidade: { type: String },
-    created: [{ type: Schema.Types.ObjectId, ref: "CriadoPor" }], //referência cruzada com termo.model
-    edited: [{ type: Schema.Types.ObjectId, ref: "EditadoPor" }], //referência cruzada com termo.model
+    created: [{ type: Schema.Types.ObjectId, ref: "Termo" }], //referência cruzada com termo.model
+    edited: [{ type: Schema.Types.ObjectId, ref: "Termo" }], //referência cruzada com termo.model
   },
   { timestamps: true }
 );
