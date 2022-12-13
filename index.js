@@ -3,6 +3,7 @@ import express from "express";
 import * as dotenv from "dotenv";
 import connect from "./config/db.config.js";
 import { termoRoute } from "./routes/termo.routes.js";
+import { perfilUser } from "./routes/perfil.user.js";
 
 dotenv.config();
 

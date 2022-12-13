@@ -8,8 +8,20 @@ const termoRoute = express.Router();
 termoRoute.post("/new-termo", async (req,res) => {
     try {
         const createdTermo = await termoModel.create({
-            ...req.body,
+            ...req.body
           });
+
+          createdTermo.criadoPor.forEach(async (element) => {
+            await termoModel.findByIdAndUpdate(
+              element.userID,
+              {
+                $push: { criadoPor : createdTermo._id },
+              },
+              { runValidators: true }
+            );
+          })
+
+          console.log("termo ",createdTermo)
 
           createdTermo.criadoPor.forEach(async (element) => {
             await UserModel.findByIdAndUpdate(
@@ -113,6 +125,16 @@ termoRoute.put("/edit/:idTermo", async (req, res) => {
             );
           })
         */
+        await UserModel.findByIdAndUpdate(
+            deletedTermo.userID,
+            {
+              $pull: {
+                tasks: idTask,
+              },
+            },
+            { new: true, runValidators: true }
+          );
+
         const deletedTermo = await termoModel.findByIdAndDelete(idTermo);
         return res.status(200).json(deletedTermo);
       } catch (error) {
