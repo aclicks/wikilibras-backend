@@ -13,10 +13,12 @@ app.use(express.json());
 // lógicas das rotas vão aqui //
 
 connect();
+app.use(cors());
 
 app.use(cors());
 
 // app.use("/user", userRoute);
+
 
 app.use('/termo', termoRoute);
 
