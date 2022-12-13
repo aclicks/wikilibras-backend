@@ -1,5 +1,6 @@
 import express from "express";
 import { termoModel } from "../models/termo.model.js";
+import { UserModel } from "../models/user.model.js";
 
 const termoRoute = express.Router();
 
@@ -9,6 +10,17 @@ termoRoute.post("/new-termo", async (req,res) => {
         const createdTermo = await termoModel.create({
             ...req.body,
           });
+
+          createdTermo.criadoPor.forEach(async (element) => {
+            await UserModel.findByIdAndUpdate(
+              element.userID,
+              {
+                $push: { created: createdTermo._id },
+              },
+              { runValidators: true }
+            );
+          })
+
           return res.status(201).json(createdTermo);
     } catch (err) {
       console.log(err);
@@ -30,13 +42,20 @@ termoRoute.get("/all-termos", async (req,res) => {
     }
 });
 
-//READ termo específico
+//READ termo específico - popula somente ou editadoPor ou criadoPor
 termoRoute.get("/termo/:id", async (req, res) => {
     try {
       const { id } = req.params;
+      
+      const termo = await termoModel.findById(id).populate({
+        path: "editadoPor",
+        populate: {
+          path: "userID",
+          model: "User",
+        },
+      });
+      
   
-      // const user = await UserModel.find({_id: id})
-      const termo = await termoModel.findById(id);
       console.log("termo ",termo);
       if (!termo) {
         return res.status(400).json({ msg: " Termo não encontrado!" });
@@ -58,6 +77,16 @@ termoRoute.put("/edit/:idTermo", async (req, res) => {
         { ...req.body },
         { new: true, runValidators: true }
       );
+
+      updatedTermo.editadoPor.forEach(async (element) => {
+        await UserModel.findByIdAndUpdate(
+          element.userID,
+          {
+            $push: { edited: updatedTermo._id },
+          },
+          { runValidators: true }
+        );
+      })
       return res.status(200).json(updatedTermo);
     } catch (error) {
       console.log(error);
@@ -65,10 +94,25 @@ termoRoute.put("/edit/:idTermo", async (req, res) => {
     }
   });
 
-  //DELETE termo
+  //DELETE termo - não deleta o termo no array do usuário
   termoRoute.delete("/delete/:idTermo", async (req, res) => {
       try {
         const { idTermo} = req.params;
+         
+        /*
+        const deleteTermodeUser = await termoModel.findById(idTermo)
+        console.log("teste ",deleteTermodeUser)
+
+        deleteTermodeUser.editadoPor.forEach(async (element) => {
+            await UserModel.findByIdAndUpdate(
+              element.userID,
+              {
+                $pull: { edited: deleteTermodeUser._id },
+              },
+              { runValidators: true }
+            );
+          })
+        */
         const deletedTermo = await termoModel.findByIdAndDelete(idTermo);
         return res.status(200).json(deletedTermo);
       } catch (error) {

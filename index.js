@@ -1,4 +1,3 @@
-import cors from "cors";
 import express from "express";
 import * as dotenv from "dotenv";
 import connect from "./config/db.config.js";
@@ -13,7 +12,6 @@ app.use(express.json())
 // lógicas das rotas vão aqui //
 
 connect();
-app.use(cors());
 
 // app.use("/user", userRoute);
 
