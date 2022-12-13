@@ -58,7 +58,7 @@ perfilUser.put("/edit/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
-    const editUser = await Usermodel.findByAndUpdate(
+    const editUser = await UserModel.findByAndUpdate(
       id,
       { ...req.body },
       { new: true, runValidators: true }
