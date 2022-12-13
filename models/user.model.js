@@ -26,7 +26,7 @@ const userSchema = new Schema(
         "Distrito Federal-DF",
         "Espírito Santo-ES",
         "Goiás-GO",
-        "Maranhão",
+        "Maranhão-MA",
         "Mato Grosso-MT",
         "Mato Grosso do Sul-MS",
         "Minas Gerais-MG",
