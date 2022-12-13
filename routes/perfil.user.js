@@ -54,5 +54,24 @@ perfilUser.delete('delete/:id', async (req, res) => {
   }
 });
 
+perfilUser.put("/edit/:id", (req, res) => {
+  try {
+
+    const {id} = req.params
+
+    const editUser = await Usermodel.findByAndUpdate(
+      id,
+      {...req.body},
+      {new: true, runValidators: true}
+    );
+
+    return res.status(200).json(editUser)
+    
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error.erros);
+  }
+})
+
 //Tudo vai aqui dentro
 export { perfilUser };
