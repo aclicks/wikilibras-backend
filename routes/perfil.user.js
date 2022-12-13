@@ -1,9 +1,9 @@
-import express from 'express';
-import { UserModel } from '../models/user.model.js';
+import express from "express";
+import { UserModel } from "../models/user.model.js";
 
 const perfilUser = express.Router();
 
-perfilUser.post('/new-user', async (req, res) => {
+perfilUser.post("/new-user", async (req, res) => {
   try {
     const form = req.body;
     const newUser = await UserModel.create(form);
@@ -15,7 +15,7 @@ perfilUser.post('/new-user', async (req, res) => {
   }
 });
 
-perfilUser.get('/all-users', async (req, res) => {
+perfilUser.get("/all-users", async (req, res) => {
   try {
     const users = await UserModel.find({});
 
@@ -26,13 +26,13 @@ perfilUser.get('/all-users', async (req, res) => {
   }
 });
 
-perfilUser.get('/user/:id'),
+perfilUser.get("/user/:id"),
   async (req, res) => {
     try {
       const { id } = req.params;
       const user = await UserModel.findById(id);
       if (!user) {
-        return res.status(400).json({ msg: 'Usuário não encontrado!' });
+        return res.status(400).json({ msg: "Usuário não encontrado!" });
       }
       return res.status(200).json(user);
     } catch (error) {
@@ -41,7 +41,7 @@ perfilUser.get('/user/:id'),
     }
   };
 
-perfilUser.delete('delete/:id', async (req, res) => {
+perfilUser.delete("delete/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -56,22 +56,20 @@ perfilUser.delete('delete/:id', async (req, res) => {
 
 perfilUser.put("/edit/:id", async (req, res) => {
   try {
-
-    const {id} = req.params
+    const { id } = req.params;
 
     const editUser = await UserModel.findByAndUpdate(
       id,
-      {...req.body},
-      {new: true, runValidators: true}
+      { ...req.body },
+      { new: true, runValidators: true }
     );
 
-    return res.status(200).json(editUser)
-    
+    return res.status(200).json(editUser);
   } catch (error) {
     console.log(error);
     return res.status(500).json(error.erros);
   }
-})
+});
 
 //Tudo vai aqui dentro
 export { perfilUser };
