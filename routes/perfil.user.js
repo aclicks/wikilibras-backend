@@ -1,14 +1,65 @@
 import express from "express";
 import { UserModel } from "../models/user.model.js";
+import bcrypt from "bcrypt0";
+import { generateToken } from "../config/jwt.confg.js";
 
 const perfilUser = express.Router();
 
-perfilUser.post("/new-user", async (req, res) => {
-  try {
-    const form = req.body;
-    const newUser = await UserModel.create(form);
+const saltRounds = 10;
 
+perfilUser.post("/sign-up", async (req, res) => {
+  try {
+    const { password } = req.body;
+
+    if (
+      !password ||
+      !password.mach(/[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/gm)
+    ) {
+      return res
+        .status(400)
+        .json({ msg: "Senha não tem os requisitos mínimos de sgurança" });
+    }
+
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hashePassword = await bcrypt.hash(password, salt);
+
+    //criar o usuário
+
+    const newUser = await UserModel.create({
+      ...req.body,
+      passwordHash: hashePassword,
+    });
+    delete newUser._doc.passwordHash;
     return res.status(201).json(newUser);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error.erros);
+  }
+});
+
+//login
+
+perfilUser.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await UserModel.findOne({ email: email });
+    if (!user) {
+      return res.status(400).json({ msg: "Usuário não cadatrado!" });
+    }
+
+    if (await bcrypt.compare(password, user.passwordHash)) {
+      delete user._doc.passwordHash;
+      //criando token
+      const token = generateToken(user);
+
+      return res.status(200).json({
+        user: user,
+        token: token,
+      });
+    } else {
+      return res.status(401).json({ msg: "Email ou Senha inválida!" });
+    }
   } catch (error) {
     console.log(error);
     return res.status(500).json(error.erros);
