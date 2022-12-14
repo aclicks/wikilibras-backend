@@ -1,6 +1,6 @@
 export default async function isEditor(req, res, next) {
   try {
-    if (req.currentUser.role !== "EDIT") {
+    if (req.currentUser.role !== "EDITOR") {
       return res.status(401).json({ msg: "User unauthorized." });
     }
 

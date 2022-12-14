@@ -66,7 +66,7 @@ termoRoute.get("/termo/:id", async (req, res) => {
 });
 
 //UPDATE termo
-termoRoute.put("/edit/:idTermo", async (req, res) => {
+termoRoute.put("/edit/:idTermo",isAuth, attachCurrentUser, isEditor, async (req, res) => {
   try {
     const { idTermo } = req.params;
 
