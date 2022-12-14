@@ -1,6 +1,3 @@
-<<<<<<< Updated upstream
-// Rotas dos logs
-=======
 import express from "express";
 import attachCurrentUser from "../middlewares/attachCurrentUser.js";
 import isAuth from "../middlewares/isAuth.js";
@@ -23,4 +20,3 @@ logRoute.get("/my-logs", isAuth, attachCurrentUser, isEditor, async (req, res) =
 });
 
 export default logRoute;
->>>>>>> Stashed changes
