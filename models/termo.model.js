@@ -78,8 +78,15 @@ const termoSchema = new Schema(
 				"78",
 			],
 		},
-		criadoPor: [{ type: String }], //guardar ID de usuário que criou
-		editadoPor: [{ type: String }], //guardar IDs de usuários que editaram e fazer um populate
+		criadoPor: { type: Schema.Types.ObjectId, ref: "User" },
+
+			  //userID: { type: Schema.Types.ObjectId, ref: "User" },
+			
+		   //guardar ID de usuário que criou
+		editadoPor: [
+				//userID: [{ type: String }]
+				{ type: Schema.Types.ObjectId, ref: "User" },
+		], //guardar IDs de usuários que editaram e fazer um populate
 	},
 	{ timestamps: true }
 );

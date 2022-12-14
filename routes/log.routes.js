@@ -20,3 +20,4 @@ logRoute.get("/my-logs", isAuth, attachCurrentUser, isEditor, async (req, res) =
 });
 
 export default logRoute;
+
