@@ -1,9 +1,12 @@
 import express from "express";
 import { termoModel } from "../models/termo.model.js";
 import { UserModel } from "../models/user.model.js";
+import isAuth from "../middlewares/isAuth.js";
+import isAdmin from "../middlewares/isAdmin.js";
+import attachCurrentUser from "../middlewares/attachCurrentUser.js";
+import isEditor from "../middlewares/isEditor.js";
 
 const termoRoute = express.Router();
-
 //CREATE termo
 termoRoute.post("/new-termo", async (req, res) => {
   try {
@@ -26,7 +29,6 @@ termoRoute.post("/new-termo", async (req, res) => {
     return res.status(500).json(err);
   }
 });
-
 //READ em todos os termos
 termoRoute.get("/all-termos", async (req, res) => {
   try {
@@ -39,7 +41,6 @@ termoRoute.get("/all-termos", async (req, res) => {
     return res.status(500).json(err);
   }
 });
-
 //READ termo específico - popula somente ou editadoPor ou criadoPor
 termoRoute.get("/termo/:id", async (req, res) => {
   try {

@@ -1,4 +1,4 @@
-export async function isAdmin(req, res, next) {
+export default async function isAdmin(req, res, next) {
   try {
     if (req.currentUser.role !== "ADMIN") {
       return res.status(401).json({ msg: "User unauthorized." });
