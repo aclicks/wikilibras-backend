@@ -1,28 +1,32 @@
 import express from "express";
 import { termoModel } from "../models/termo.model.js";
 import { UserModel } from "../models/user.model.js";
+import isAuth from "../middlewares/isAuth.js";
+import isAdmin from "../middlewares/isAdmin.js";
+import attachCurrentUser from "../middlewares/attachCurrentUser.js";
+import isEditor from "../middlewares/isEditor.js";
 
 const termoRoute = express.Router();
 
 //CREATE termo
-termoRoute.post("/new-termo", async (req,res) => {
+termoRoute.post("/new-termo", isAuth, attachCurrentUser, async (req,res) => {
     try {
+        const {_id} = req.currentUser
         const createdTermo = await termoModel.create({
-            ...req.body
+            ...req.body, criadoPor:req.currentUser._id
           });
-
-  //console.log("termo ",createdTermo)
-          
-            await UserModel.findByIdAndUpdate(
-              ,
-              {
-                $push: { created: createdTermo._id },
-              },
-              { runValidators: true }
-            );
-        
-
-          return res.status(201).json(createdTermo);
+    console.log("id ",createdTermo._id)
+    const userUpdated = await UserModel.findByIdAndUpdate(
+        req.currentUser._id,
+        {
+        $push: {
+            created: createdTermo._id,
+        },
+        },
+        { new: true, runValidators: true }
+    );
+            
+    return res.status(201).json(createdTermo);
     } catch (err) {
       console.log(err);
       return res.status(500).json(err);
@@ -47,13 +51,7 @@ termoRoute.get("/termo/:id", async (req, res) => {
     try {
         const { id } = req.params;
         
-        const termo = await termoModel.findById(id).populate({
-          path: "editadoPor",
-          populate: {
-            path: "userID",
-            model: "User",
-          },
-        });
+        const termo = await termoModel.findById(id).populate("editadoPor");
         
     
         console.log("termo ",termo);
@@ -68,25 +66,26 @@ termoRoute.get("/termo/:id", async (req, res) => {
     });
 
 //UPDATE termo
-termoRoute.put("/edit/:idTermo", async (req, res) => {
+termoRoute.put("/edit/:idTermo",isAuth, attachCurrentUser, async (req, res) => {
   try {
     const { idTermo } = req.params;
+    const {_id} = req.currentUser
 
       const updatedTermo = await termoModel.findOneAndUpdate(
         { _id: idTermo },
-        { ...req.body },
+        { ...req.body, editadoPor:req.currentUser._id },
         { new: true, runValidators: true }
       );
 
-      updatedTermo.editadoPor.forEach(async (element) => {
-        await UserModel.findByIdAndUpdate(
-          element.userID,
-          {
-            $push: { edited: updatedTermo._id },
-          },
-          { runValidators: true }
-        );
-      })
+      const userUpdated = await UserModel.findByIdAndUpdate(
+        req.currentUser._id,
+        {
+        $push: {
+            edited: updatedTermo._id,
+        },
+        },
+        { new: true, runValidators: true }
+    );
       return res.status(200).json(updatedTermo);
     } catch (error) {
       console.log(error);
@@ -95,24 +94,24 @@ termoRoute.put("/edit/:idTermo", async (req, res) => {
   });
 
   //DELETE termo - não deleta o termo no array do usuário
-  termoRoute.delete("/delete/:idTermo", async (req, res) => {
+  termoRoute.delete("/delete/:idTermo", isAuth, attachCurrentUser, async (req, res) => {
       try {
         const { idTermo} = req.params;
          
         const deletedTermo = await termoModel.findByIdAndDelete(idTermo);
-       /*
-        await UserModel.findByIdAndUpdate(
-            deletedTermo.editadoPor.userID,
+         
+          await UserModel.findByIdAndUpdate(
+            req.currentUser._id,
             {
-              $pull: { edited: idTermo }
+              $pull: { created: deletedTermo._id }
             },
             { runValidators: true }
           );
-        */  
+
           await UserModel.findByIdAndUpdate(
-            deletedTermo.criadoPor.userID,
+            req.currentUser._id,
             {
-              $pull: { created: idTermo }
+              $pull: { edited: deletedTermo._id }
             },
             { runValidators: true }
           );
