@@ -130,5 +130,17 @@ perfilUser.put("/edit/:id", async (req, res) => {
   }
 });
 
+
+perfilUser.get("/profile", isAuth, attachCurrentUser, async (req, res) => {
+  try {
+    //req.currentUser -> veio do middle attachCurrentUser
+
+    return res.status(200).json(req.currentUser);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error.errors);
+  }
+});
+
 //Tudo vai aqui dentro
 export { perfilUser };
