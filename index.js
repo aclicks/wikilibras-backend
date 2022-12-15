@@ -13,7 +13,7 @@ app.use(express.json());
 // lógicas das rotas vão aqui //
 
 connect();
-app.use(cors());
+app.use(cors({ origin: process.env.REACT_URL }));
 
 // app.use("/user", userRoute);
 
@@ -23,7 +23,7 @@ app.use("/user", perfilUser);
 
 // o servidor subindo pro ar.
 app.listen(process.env.PORT, () => {
-  console.log(
-    `App up and running on port http://localhost:${process.env.PORT}`
-  );
+	console.log(
+		`App up and running on port http://localhost:${process.env.PORT}`
+	);
 });
