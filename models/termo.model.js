@@ -80,12 +80,12 @@ const termoSchema = new Schema(
 		},
 		criadoPor: { type: Schema.Types.ObjectId, ref: "User" },
 
-			  //userID: { type: Schema.Types.ObjectId, ref: "User" },
-			
-		   //guardar ID de usuário que criou
+		//userID: { type: Schema.Types.ObjectId, ref: "User" },
+
+		//guardar ID de usuário que criou
 		editadoPor: [
-				//userID: [{ type: String }]
-				{ type: Schema.Types.ObjectId, ref: "User" },
+			//userID: [{ type: String }]
+			{ type: Schema.Types.ObjectId, ref: "User" },
 		], //guardar IDs de usuários que editaram e fazer um populate
 	},
 	{ timestamps: true }
