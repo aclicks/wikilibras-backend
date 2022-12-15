@@ -19,7 +19,7 @@ app.use(cors());
 
 app.use("/termo", termoRoute);
 
-app.use("/perfil-user", perfilUser);
+app.use("/user", perfilUser);
 
 // o servidor subindo pro ar.
 app.listen(process.env.PORT, () => {
