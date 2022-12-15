@@ -22,7 +22,7 @@ perfilUser.post("/sign-up", async (req, res) => {
       ) {
       return res
         .status(400)
-        .json({ msg: "Senha não tem os requisitos mínimos de sgurança" });
+        .json({ msg: "Senha não tem os requisitos mínimos de segurança" });
     }
 
     const salt = await bcrypt.genSalt(saltRounds);
@@ -50,7 +50,7 @@ perfilUser.post("/login", async (req, res) => {
 
     const user = await UserModel.findOne({ email: email });
     if (!user) {
-      return res.status(400).json({ msg: "Usuário não cadatrado!" });
+      return res.status(400).json({ msg: "Usuário não cadastrado!" });
     }
 
     if (await bcrypt.compare(password, user.passwordHash)) {
@@ -127,6 +127,18 @@ perfilUser.put("/edit/:id", async (req, res) => {
   } catch (error) {
     console.log(error);
     return res.status(500).json(error.erros);
+  }
+});
+
+
+perfilUser.get("/profile", isAuth, attachCurrentUser, async (req, res) => {
+  try {
+    //req.currentUser -> veio do middle attachCurrentUser
+
+    return res.status(200).json(req.currentUser);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error.errors);
   }
 });
 
