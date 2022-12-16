@@ -113,7 +113,7 @@ perfilUser.delete("/delete", isAuth , attachCurrentUser , async (req, res) => {
   }
 });
 
-perfilUser.put("/edit/:id", isAuth , attachCurrentUser, async (req, res) => {
+perfilUser.put("/edit/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
