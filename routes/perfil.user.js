@@ -113,9 +113,9 @@ perfilUser.delete("/delete", isAuth , attachCurrentUser , async (req, res) => {
   }
 });
 
-perfilUser.put("/edit", isAuth , attachCurrentUser, async (req, res) => {
+perfilUser.put("/edit/:id", isAuth , attachCurrentUser, async (req, res) => {
   try {
-    const { id } = req.currentUser._id;
+    const { id } = req.params;
 
     const editUser = await UserModel.findByIdAndUpdate(
       id,
