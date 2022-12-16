@@ -16,7 +16,7 @@ const userSchema = new Schema(
 		photo: { String },
 		estado: {
 			type: String,
-			enun: [
+			enum: [
 				"Acre-AC",
 				"Alagoas-AL",
 				"Amapá-AP",
