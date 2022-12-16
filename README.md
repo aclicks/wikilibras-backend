@@ -23,7 +23,33 @@ Aos usuários ainda não cadastrados ficam disponíveis as funcionalidades de co
 
 ### Usuário
 
+ POST /user/sign-up (cria um usuário)
+ 
+ POST /user/login (login de usuário)
+ 
+ GET /user/all-users (retorna todos usuários cadastrados)
+ 
+ GET /user/:id (retorna o usuário específico)
+ 
+ DELETE /user/:id [rota protegida] (apaga o usuário específico)
+ 
+ PUT /user/:id [rota protegida] (edita o usuário específico)
+ 
+ GET /user/profile (perfil de usuário)
+ 
+### Termos
 
+POST /termo/new-termo (cria um termo)
+ 
+ GET /termo/all-termos (retorna todos termos cadastrados)
+ 
+ GET /termo/termo/:id (retorna o termo específico)
+ 
+ DELETE /termo/:id [rota protegida] (apaga o usuário específico)
+ 
+ PUT /termo/:id [rota protegida] (edita o termo específico)
+ 
+ 
 ## Tecnologias utilizadas
 
 HTML
