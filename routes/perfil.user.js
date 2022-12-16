@@ -82,9 +82,9 @@ perfilUser.get("/all-users", async (req, res) => {
   }
 });
 
-perfilUser.get("/user/:id", async (req, res) => {
+perfilUser.get("/user/", isAuth , attachCurrentUser, async (req, res) => {
     try {
-      const { id } = req.params;
+      const { id } = req.currentUser._id;
       const user = await UserModel.findById(id);
       console.log("user ",user)
       if (!user) {
@@ -97,9 +97,9 @@ perfilUser.get("/user/:id", async (req, res) => {
     }
   });
 
-perfilUser.delete("/delete/:id", isAuth , attachCurrentUser , async (req, res) => {
+perfilUser.delete("/delete/", isAuth , attachCurrentUser , async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.currentUser._id;
 
     const deletedUser = await UserModel.findByIdAndDelete(id);
     //await termoModel.deleteOne({criadoPor:req.currentUser._id})
@@ -113,9 +113,9 @@ perfilUser.delete("/delete/:id", isAuth , attachCurrentUser , async (req, res) =
   }
 });
 
-perfilUser.put("/edit/:id", async (req, res) => {
+perfilUser.put("/edit/", isAuth , attachCurrentUser, async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.currentUser._id;
 
     const editUser = await UserModel.findByAndUpdate(
       id,
