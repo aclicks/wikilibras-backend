@@ -4,6 +4,7 @@ import * as dotenv from "dotenv";
 import connect from "./config/db.config.js";
 import { termoRoute } from "./routes/termo.routes.js";
 import { perfilUser } from "./routes/perfil.user.js";
+import { uploadImgRouter } from "./routes/uploadImage.routes.js";
 
 dotenv.config();
 
@@ -21,9 +22,11 @@ app.use("/termo", termoRoute);
 
 app.use("/user", perfilUser);
 
+app.use("/uploadImage", uploadImgRouter);
+
 // o servidor subindo pro ar.
 app.listen(process.env.PORT, () => {
-	console.log(
-		`App up and running on port http://localhost:${process.env.PORT}`
-	);
+  console.log(
+    `App up and running on port http://localhost:${process.env.PORT}`
+  );
 });
