@@ -82,7 +82,7 @@ perfilUser.get("/all-users", async (req, res) => {
   }
 });
 
-perfilUser.get("/user/:id", async (req, res) => {
+perfilUser.get("/user/", async (req, res) => {
     try {
       const { id } = req.params;
       const user = await UserModel.findById(id);
@@ -97,7 +97,7 @@ perfilUser.get("/user/:id", async (req, res) => {
     }
   });
 
-perfilUser.delete("/delete/:id", isAuth , attachCurrentUser , async (req, res) => {
+perfilUser.delete("/delete/", isAuth , attachCurrentUser , async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -113,7 +113,7 @@ perfilUser.delete("/delete/:id", isAuth , attachCurrentUser , async (req, res) =
   }
 });
 
-perfilUser.put("/edit/:id", async (req, res) => {
+perfilUser.put("/edit/", isAuth , attachCurrentUser, async (req, res) => {
   try {
     const { id } = req.params;
 
