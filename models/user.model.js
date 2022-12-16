@@ -49,6 +49,7 @@ const userSchema = new Schema(
 			default: "Estado-UF",
 		},
 		cidade: { type: String },
+		profilePic: { type: String },
 		created: [{ type: Schema.Types.ObjectId, ref: "Termo" }], //referência cruzada com termo.model
 		edited: [{ type: Schema.Types.ObjectId, ref: "Termo" }], //referência cruzada com termo.model
 	},
