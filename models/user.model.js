@@ -44,9 +44,7 @@ const userSchema = new Schema(
 				"São Paulo-SP",
 				"Sergipe-SE",
 				"Tocantins-TO",
-				"Estado-UF",
 			],
-			default: "Estado-UF",
 		},
 		cidade: { type: String },
 		created: [{ type: Schema.Types.ObjectId, ref: "Termo" }], //referência cruzada com termo.model
