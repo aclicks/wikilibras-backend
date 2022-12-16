@@ -117,7 +117,7 @@ perfilUser.put("/edit", isAuth , attachCurrentUser, async (req, res) => {
   try {
     const { id } = req.currentUser._id;
 
-    const editUser = await UserModel.findByAndUpdate(
+    const editUser = await UserModel.findByIdAndUpdate(
       id,
       { ...req.body },
       { new: true, runValidators: true }
