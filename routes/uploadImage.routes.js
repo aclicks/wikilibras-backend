@@ -11,4 +11,15 @@ uploadImgRouter.post("/", uploadImg.single("picture"), (req, res) => {
   return res.status(201).json({ url: req.file.path });
 });
 
+router.get('/', (req, res) => {
+  pic.find()
+    .then(picFromDB => {
+      // console.log(moviesFromDB);
+      res.render(, { pic: picFromDB });
+    })
+    .catch(err => console.log(`Erro recuperando foto de perfil: ${err}`));
+});
+
+
+
 export { uploadImgRouter };
