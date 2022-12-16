@@ -45,7 +45,7 @@ POST /termo/new-termo (cria um termo)
  
  GET /termo/termo/:id (retorna o termo específico)
  
- DELETE /termo/:id [rota protegida] (apaga o usuário específico)
+ DELETE /termo/:id [rota protegida] (apaga o termo específico)
  
  PUT /termo/:id [rota protegida] (edita o termo específico)
  
